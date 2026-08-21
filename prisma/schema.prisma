@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id            Int            @id @default(autoincrement())
+  name          String
+  phone         String         @unique
+  email         String?
+  conversations Conversation[]
+  tickets       Ticket[]
+  createdAt     DateTime       @default(now())
+}
+
+model Conversation {
+  id         Int       @id @default(autoincrement())
+  customerId Int
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  status     String    @default("OPEN")
+  messages   Message[]
+  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime  @default(now())
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversationId Int
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+
+  direction      String
+  body           String
+
+  createdAt      DateTime @default(now())
+}
+
+model Ticket {
+  id          Int      @id @default(autoincrement())
+  customerId  Int
+  customer    Customer @relation(fields: [customerId], references: [id])
+
+  category    String
+  subcategory String
+
+  status      String @default("OPEN")
+
+  createdAt   DateTime @default(now())
+}
+
+model Session {
+  id         Int      @id @default(autoincrement())
+  phone      String   @unique
+  state      String
+  updatedAt  DateTime @updatedAt
+}

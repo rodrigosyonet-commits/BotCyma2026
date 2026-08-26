@@ -1,36 +1,69 @@
-const conversations = [
-  {
-    id: 1,
-    name: "Juan Pérez",
-    phone: "524611234567",
-    lastMessage: "Tengo una filtración",
-    time: "11:25"
-  },
-  {
-    id: 2,
-    name: "María López",
-    phone: "524421112233",
-    lastMessage: "Necesito una factura",
-    time: "10:40"
-  },
-  {
-    id: 3,
-    name: "Carlos Ramírez",
-    phone: "524771234567",
-    lastMessage: "Renovación de contrato",
-    time: "09:15"
-  }
-];
-
 export default function ConversationsPage() {
+  const conversations = [
+    {
+      id: 1,
+      name: "Juan Pérez",
+      phone: "+52 461 123 4567",
+      lastMessage: "Necesito una factura",
+      unread: 2,
+    },
+    {
+      id: 2,
+      name: "María López",
+      phone: "+52 442 111 2233",
+      lastMessage: "Tengo una filtración",
+      unread: 0,
+    },
+    {
+      id: 3,
+      name: "Carlos Ramírez",
+      phone: "+52 477 555 6677",
+      lastMessage: "Quiero renovar contrato",
+      unread: 1,
+    },
+  ];
+
+  const messages = [
+    {
+      id: 1,
+      direction: "in",
+      text: "Hola",
+      time: "10:20",
+    },
+    {
+      id: 2,
+      direction: "out",
+      text: "Bienvenido a CYMA Arrendamiento.",
+      time: "10:21",
+    },
+    {
+      id: 3,
+      direction: "out",
+      text: "Seleccione una opción:",
+      time: "10:21",
+    },
+    {
+      id: 4,
+      direction: "in",
+      text: "1",
+      time: "10:22",
+    },
+    {
+      id: 5,
+      direction: "out",
+      text: "Facturación\n1. Solicitar factura\n2. Complemento de pago",
+      time: "10:22",
+    },
+  ];
+
   return (
-    <main
+    <div
       style={{
         display: "grid",
-        gridTemplateColumns: "350px 1fr 320px",
+        gridTemplateColumns: "320px 1fr 350px",
         height: "100vh",
-        fontFamily: "Segoe UI, sans-serif",
-        background: "#f0f2f5"
+        background: "#f5f5f5",
+        fontFamily: "Segoe UI, Arial, sans-serif",
       }}
     >
       {/* LISTA DE CONVERSACIONES */}
@@ -38,15 +71,15 @@ export default function ConversationsPage() {
         style={{
           background: "#fff",
           borderRight: "1px solid #ddd",
-          overflowY: "auto"
+          overflowY: "auto",
         }}
       >
         <div
           style={{
-            padding: "16px",
+            padding: "20px",
+            borderBottom: "1px solid #ddd",
+            fontSize: "20px",
             fontWeight: 700,
-            fontSize: "18px",
-            borderBottom: "1px solid #ddd"
           }}
         >
           Conversaciones
@@ -56,148 +89,156 @@ export default function ConversationsPage() {
           <div
             key={chat.id}
             style={{
-              padding: "16px",
+              padding: "15px",
               borderBottom: "1px solid #eee",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
           >
-            <strong>{chat.name}</strong>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <strong>{chat.name}</strong>
+
+              {chat.unread > 0 && (
+                <span
+                  style={{
+                    background: "#22c55e",
+                    color: "#fff",
+                    borderRadius: "999px",
+                    padding: "2px 8px",
+                    fontSize: "12px",
+                  }}
+                >
+                  {chat.unread}
+                </span>
+              )}
+            </div>
 
             <div
               style={{
                 fontSize: "13px",
                 color: "#666",
-                marginTop: "4px"
+                marginTop: "4px",
+              }}
+            >
+              {chat.phone}
+            </div>
+
+            <div
+              style={{
+                fontSize: "13px",
+                color: "#444",
+                marginTop: "6px",
               }}
             >
               {chat.lastMessage}
             </div>
-
-            <small
-              style={{
-                color: "#999"
-              }}
-            >
-              {chat.time}
-            </small>
           </div>
         ))}
       </aside>
 
       {/* CHAT */}
-      <section
+      <main
         style={{
           display: "flex",
           flexDirection: "column",
-          background: "#e5ddd5"
         }}
       >
         <div
           style={{
             background: "#fff",
-            padding: "16px",
-            borderBottom: "1px solid #ddd"
+            borderBottom: "1px solid #ddd",
+            padding: "15px 20px",
           }}
         >
           <strong>Juan Pérez</strong>
-          <br />
-          <small>524611234567</small>
+          <div
+            style={{
+              color: "#666",
+              fontSize: "13px",
+              marginTop: "4px",
+            }}
+          >
+            +52 461 123 4567
+          </div>
         </div>
 
         <div
           style={{
             flex: 1,
+            overflowY: "auto",
             padding: "20px",
-            overflowY: "auto"
+            background: "#efeae2",
           }}
         >
-          <div
-            style={{
-              background: "#fff",
-              padding: "12px",
-              borderRadius: "10px",
-              width: "fit-content",
-              marginBottom: "15px"
-            }}
-          >
-            Hola
-          </div>
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              style={{
+                display: "flex",
+                justifyContent:
+                  msg.direction === "out"
+                    ? "flex-end"
+                    : "flex-start",
+                marginBottom: "10px",
+              }}
+            >
+              <div
+                style={{
+                  background:
+                    msg.direction === "out"
+                      ? "#dcf8c6"
+                      : "#fff",
+                  padding: "10px 14px",
+                  borderRadius: "12px",
+                  maxWidth: "70%",
+                  boxShadow:
+                    "0 1px 2px rgba(0,0,0,0.10)",
+                }}
+              >
+                <div
+                  style={{
+                    whiteSpace: "pre-line",
+                  }}
+                >
+                  {msg.text}
+                </div>
 
-          <div
-            style={{
-              background: "#dcf8c6",
-              padding: "12px",
-              borderRadius: "10px",
-              width: "fit-content",
-              maxWidth: "500px",
-              marginLeft: "auto",
-              marginBottom: "15px"
-            }}
-          >
-            Bienvenido a CYMA Arrendamiento.
-            <br />
-            <br />
-            Seleccione una opción:
-            <br />
-            1️⃣ Facturación
-            <br />
-            2️⃣ Recibos
-            <br />
-            3️⃣ Mantenimiento
-            <br />
-            4️⃣ Contratos
-            <br />
-            5️⃣ Documentación
-            <br />
-            6️⃣ Asesor
-          </div>
-
-          <div
-            style={{
-              background: "#fff",
-              padding: "12px",
-              borderRadius: "10px",
-              width: "fit-content"
-            }}
-          >
-            3
-          </div>
-
-          <div
-            style={{
-              background: "#dcf8c6",
-              padding: "12px",
-              borderRadius: "10px",
-              width: "fit-content",
-              marginLeft: "auto"
-            }}
-          >
-            Mantenimiento
-            <br />
-            1️⃣ Filtraciones
-            <br />
-            2️⃣ Estructural
-            <br />
-            3️⃣ Eléctrico
-          </div>
+                <div
+                  style={{
+                    textAlign: "right",
+                    marginTop: "5px",
+                    fontSize: "11px",
+                    color: "#666",
+                  }}
+                >
+                  {msg.time}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div
           style={{
             background: "#fff",
+            padding: "15px",
             borderTop: "1px solid #ddd",
-            padding: "10px",
             display: "flex",
-            gap: "10px"
+            gap: "10px",
           }}
         >
           <input
+            type="text"
             placeholder="Escribir mensaje..."
             style={{
               flex: 1,
               padding: "12px",
+              border: "1px solid #ccc",
               borderRadius: "8px",
-              border: "1px solid #ccc"
             }}
           />
 
@@ -206,81 +247,81 @@ export default function ConversationsPage() {
               background: "#25D366",
               color: "#fff",
               border: "none",
-              borderRadius: "8px",
               padding: "12px 20px",
-              cursor: "pointer"
+              borderRadius: "8px",
+              cursor: "pointer",
             }}
           >
             Enviar
           </button>
         </div>
-      </section>
+      </main>
 
-      {/* PANEL DE DETALLE */}
+      {/* PANEL DERECHO */}
       <aside
         style={{
           background: "#fff",
           borderLeft: "1px solid #ddd",
-          padding: "20px"
+          padding: "20px",
         }}
       >
         <h2>Cliente</h2>
 
-        <p>
+        <div style={{ marginBottom: "15px" }}>
           <strong>Nombre</strong>
           <br />
           Juan Pérez
-        </p>
+        </div>
 
-        <p>
+        <div style={{ marginBottom: "15px" }}>
           <strong>Teléfono</strong>
           <br />
-          524611234567
-        </p>
+          +52 461 123 4567
+        </div>
 
-        <p>
+        <div style={{ marginBottom: "15px" }}>
           <strong>Correo</strong>
           <br />
           juan@correo.com
-        </p>
+        </div>
 
         <hr />
 
-        <h3>Solicitud</h3>
+        <h3>Ticket Actual</h3>
 
-        <p>
+        <div style={{ marginBottom: "10px" }}>
           <strong>Categoría</strong>
           <br />
-          Mantenimiento
-        </p>
+          Facturación
+        </div>
 
-        <p>
+        <div style={{ marginBottom: "10px" }}>
           <strong>Subcategoría</strong>
           <br />
-          Filtraciones
-        </p>
+          Solicitud de factura
+        </div>
 
-        <p>
-          <strong>Estado</strong>
+        <div style={{ marginBottom: "10px" }}>
+          <strong>Estatus</strong>
           <br />
           Abierto
-        </p>
+        </div>
 
         <button
           style={{
             width: "100%",
-            padding: "12px",
+            marginTop: "15px",
             background: "#2563eb",
             color: "#fff",
             border: "none",
+            padding: "12px",
             borderRadius: "8px",
-            marginTop: "15px",
-            cursor: "pointer"
+            cursor: "pointer",
           }}
         >
           Tomar conversación
         </button>
       </aside>
-    </main>
+    </div>
   );
 }

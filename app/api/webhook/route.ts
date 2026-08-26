@@ -1,15 +1,35 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  return NextResponse.json({
-    ok: true,
-    message: "Webhook funcionando"
-  });
+export async function GET(req: NextRequest) {
+  const mode = req.nextUrl.searchParams.get("hub.mode");
+  const token = req.nextUrl.searchParams.get("hub.verify_token");
+  const challenge = req.nextUrl.searchParams.get("hub.challenge");
+
+  if (
+    mode === "subscribe" &&
+    token === process.env.WHATSAPP_VERIFY_TOKEN
+  ) {
+    return new Response(challenge || "", {
+      status: 200,
+    });
+  }
+
+  return NextResponse.json(
+    {
+      error: "Verification failed",
+    },
+    {
+      status: 403,
+    }
+  );
 }
 
-export async function POST() {
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+
+  console.log("Webhook recibido:", body);
+
   return NextResponse.json({
-    ok: true,
-    message: "POST funcionando"
+    received: true,
   });
 }
